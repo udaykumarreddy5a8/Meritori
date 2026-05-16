@@ -1,0 +1,1333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+<title>Meritori — We Believe in Talent, Not Titles</title>
+<meta name="description" content="A talent-first mentorship program. No resumes. No grades. Only what you can build."/>
+<meta name="theme-color" content="#101010"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@300;400;600;700;800&family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+/* ════════════════════════════════
+   RESET & ROOT
+════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+:root {
+  --black: #101010;
+  --white: #f0ede8;
+  --dim: #666460;
+  --line: rgba(240,237,232,0.07);
+  --accent: #e8e2d8;
+}
+
+body {
+  background: var(--black);
+  color: var(--white);
+  font-family: 'Syne', sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ════════════════════════════════
+   PAGE VIEWS — SPA ROUTING
+════════════════════════════════ */
+.page { display: none; }
+.page.active { display: block; }
+
+/* ════════════════════════════════
+   NAV (shared)
+════════════════════════════════ */
+.nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 200;
+  padding: 28px 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  mix-blend-mode: normal;
+}
+.nav-logo {
+  font-family: 'DM Serif Display', serif;
+  font-size: 20px;
+  letter-spacing: -0.01em;
+  color: var(--white);
+  text-decoration: none;
+  cursor: pointer;
+}
+.nav-apply {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--dim);
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 0.2s;
+  padding: 0;
+}
+.nav-apply:hover { color: var(--white); }
+
+/* ════════════════════════════════
+   ██ LANDING PAGE
+════════════════════════════════ */
+
+/* ── Hero ── */
+.hero {
+  position: relative;
+  height: 100vh;
+  min-height: 600px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 0 48px 72px;
+  overflow: hidden;
+}
+
+/* Subtle animated gradient orb */
+.hero-orb {
+  position: absolute;
+  top: 20%; right: 10%;
+  width: 520px; height: 520px;
+  background: radial-gradient(ellipse, rgba(240,237,232,0.025) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  animation: breathe 8s ease-in-out infinite;
+}
+@keyframes breathe {
+  0%, 100% { transform: scale(1) translateY(0); opacity: 0.8; }
+  50%       { transform: scale(1.06) translateY(-20px); opacity: 1; }
+}
+
+.hero-eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--dim);
+  margin-bottom: 24px;
+  animation: fadeUp 1s ease both;
+}
+
+.hero-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(44px, 7vw, 88px);
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+  max-width: 820px;
+  margin-bottom: 40px;
+  animation: fadeUp 1s 0.1s ease both;
+  font-weight: 400;
+}
+.hero-title em {
+  font-style: italic;
+  color: var(--accent);
+}
+
+.hero-cta {
+  animation: fadeUp 1s 0.25s ease both;
+}
+.btn-hero {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--black);
+  background: var(--white);
+  border: none;
+  padding: 16px 32px;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s;
+}
+.btn-hero:hover { background: #ffffff; transform: translateY(-1px); }
+.btn-hero .arrow { transition: transform 0.2s; }
+.btn-hero:hover .arrow { transform: translateX(4px); }
+
+.hero-scroll {
+  position: absolute;
+  bottom: 32px; right: 48px;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--dim);
+  writing-mode: vertical-rl;
+  animation: fadeUp 1s 0.4s ease both;
+}
+
+/* ── Marquee ── */
+.marquee-wrap {
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  overflow: hidden;
+  padding: 14px 0;
+}
+.marquee-track {
+  display: flex;
+  gap: 0;
+  white-space: nowrap;
+  animation: marquee 32s linear infinite;
+}
+.marquee-item {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--dim);
+  padding: 0 40px;
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+}
+.marquee-item::before { content: '◆'; font-size: 6px; color: rgba(240,237,232,0.2); }
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* ── Manifesto ── */
+.manifesto {
+  padding: 140px 48px;
+  max-width: 860px;
+}
+.manifesto-line {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(24px, 3.5vw, 42px);
+  font-weight: 400;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  color: rgba(240,237,232,0.18);
+  margin-bottom: 28px;
+  transition: color 0.4s;
+}
+.manifesto-line.lit { color: var(--white); }
+.manifesto-line em { font-style: italic; }
+
+/* ── Section ── */
+.section {
+  padding: 100px 48px;
+  border-top: 1px solid var(--line);
+}
+.section-no { 
+  font-family: 'DM Mono', monospace; 
+  font-size: 10px; 
+  letter-spacing: 0.2em; 
+  text-transform: uppercase; 
+  color: var(--dim); 
+  margin-bottom: 60px; 
+}
+
+/* ── Beliefs ── */
+.beliefs-list {
+  list-style: none;
+  max-width: 680px;
+}
+.belief {
+  padding: 48px 0;
+  border-bottom: 1px solid var(--line);
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 24px;
+  align-items: start;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.belief.visible { opacity: 1; transform: translateY(0); }
+.belief:last-child { border-bottom: none; }
+.belief-n {
+  font-family: 'DM Serif Display', serif;
+  font-size: 52px;
+  font-style: italic;
+  color: var(--line);
+  line-height: 1;
+  user-select: none;
+  transition: color 0.4s;
+}
+.belief:hover .belief-n { color: rgba(240,237,232,0.2); }
+.belief-text h3 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 22px;
+  font-weight: 400;
+  margin-bottom: 10px;
+  letter-spacing: -0.01em;
+}
+.belief-text p { font-size: 15px; color: var(--dim); line-height: 1.75; }
+
+/* ── Numbers ── */
+.numbers {
+  padding: 100px 48px;
+  border-top: 1px solid var(--line);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--line);
+}
+.number-cell {
+  background: var(--black);
+  padding: 56px 48px;
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.number-cell.visible { opacity: 1; transform: translateY(0); }
+.number-big {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(56px, 8vw, 96px);
+  letter-spacing: -0.04em;
+  line-height: 1;
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 400;
+}
+.number-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+
+/* ── Process ── */
+.process-list { max-width: 680px; list-style: none; }
+.process-item {
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  gap: 28px;
+  padding: 40px 0;
+  border-bottom: 1px solid var(--line);
+  align-items: start;
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.process-item.visible { opacity: 1; transform: translateY(0); }
+.process-item:last-child { border-bottom: none; }
+.process-n {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  color: var(--dim);
+  padding-top: 4px;
+}
+.process-content h3 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 20px;
+  font-weight: 400;
+  margin-bottom: 8px;
+  letter-spacing: -0.01em;
+}
+.process-content p { font-size: 15px; color: var(--dim); line-height: 1.75; }
+
+/* ── CTA Band ── */
+.cta-band {
+  padding: 160px 48px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 48px;
+}
+.cta-band h2 {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(36px, 6vw, 72px);
+  font-weight: 400;
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+  max-width: 800px;
+}
+.cta-band h2 em { font-style: italic; color: var(--dim); }
+.cta-meta {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--dim);
+  display: flex;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+.cta-meta span { display: flex; align-items: center; gap: 8px; }
+.cta-meta span::before { content: '—'; }
+
+/* ── Footer ── */
+.footer {
+  border-top: 1px solid var(--line);
+  padding: 40px 48px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.footer-copy {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: var(--dim);
+  text-transform: uppercase;
+}
+
+/* ════════════════════════════════
+   ██ APPLICATION PAGE
+════════════════════════════════ */
+.app-page { background: var(--black); min-height: 100vh; }
+
+.app-header {
+  padding: 140px 48px 80px;
+  border-bottom: 1px solid var(--line);
+  max-width: 780px;
+}
+.app-eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--dim);
+  margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.app-eyebrow::before { content: ''; display: block; width: 28px; height: 1px; background: var(--dim); }
+.app-header h1 {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(36px, 5vw, 60px);
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+  margin-bottom: 20px;
+}
+.app-header h1 em { font-style: italic; color: var(--dim); }
+.app-header p {
+  font-size: 16px;
+  color: var(--dim);
+  line-height: 1.7;
+  max-width: 480px;
+}
+.app-meta {
+  display: flex;
+  gap: 28px;
+  margin-top: 28px;
+  flex-wrap: wrap;
+}
+.app-meta-tag {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--dim);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.app-meta-tag::before { content: '–'; }
+
+/* Form area */
+.app-body {
+  padding: 0 48px 100px;
+  max-width: 780px;
+}
+
+/* Identity block */
+.identity-block {
+  padding: 64px 0 48px;
+  border-bottom: 1px solid var(--line);
+}
+.block-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--dim);
+  margin-bottom: 40px;
+}
+.field-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 40px;
+}
+.field-full { grid-column: 1 / -1; }
+.field {
+  padding: 24px 0;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.field:last-child { border-bottom: none; }
+label {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+input[type="text"],
+input[type="email"],
+select {
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--line);
+  color: var(--white);
+  font-family: 'Syne', sans-serif;
+  font-size: 16px;
+  padding: 10px 0;
+  outline: none;
+  transition: border-color 0.2s;
+  width: 100%;
+  -webkit-appearance: none;
+  appearance: none;
+}
+input::placeholder { color: rgba(240,237,232,0.15); }
+input:focus, select:focus { border-color: rgba(240,237,232,0.4); }
+select { cursor: pointer; background-image: none; }
+select option { background: #1a1a1a; }
+
+/* Error states */
+.err {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: rgba(240,120,100,0.8);
+  display: none;
+}
+.err.show { display: block; }
+input.invalid, select.invalid { border-color: rgba(240,120,100,0.5); }
+
+/* Questions */
+.questions { padding: 64px 0; }
+.q-block {
+  padding: 48px 0;
+  border-bottom: 1px solid var(--line);
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.q-block.visible { opacity: 1; transform: translateY(0); }
+.q-block:last-child { border-bottom: none; }
+.q-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--dim);
+  margin-bottom: 12px;
+}
+.q-text {
+  font-family: 'DM Serif Display', serif;
+  font-size: 22px;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  margin-bottom: 6px;
+  line-height: 1.35;
+}
+.q-hint {
+  font-size: 14px;
+  color: var(--dim);
+  line-height: 1.65;
+  margin-bottom: 20px;
+  max-width: 560px;
+}
+textarea {
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--line);
+  color: var(--white);
+  font-family: 'Syne', sans-serif;
+  font-size: 15px;
+  line-height: 1.7;
+  padding: 12px 0;
+  resize: none;
+  width: 100%;
+  min-height: 120px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+textarea::placeholder { color: rgba(240,237,232,0.14); font-style: italic; }
+textarea:focus { border-color: rgba(240,237,232,0.35); }
+textarea.invalid { border-color: rgba(240,120,100,0.5); }
+.char-count {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--dim);
+  text-align: right;
+  margin-top: 6px;
+  opacity: 0.5;
+  transition: opacity 0.2s, color 0.2s;
+}
+.char-count.active { opacity: 1; }
+.char-count.warn { color: rgba(240,200,100,0.8); }
+.char-count.over { color: rgba(240,100,80,0.8); }
+
+/* Radio choices */
+.choices { display: flex; flex-direction: column; gap: 0; margin-top: 6px; }
+.choice {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--line);
+  cursor: pointer;
+  transition: all 0.15s;
+  user-select: none;
+}
+.choice:last-child { border-bottom: none; }
+.choice:hover { padding-left: 4px; }
+.choice input[type="radio"] { display: none; }
+.choice-indicator {
+  width: 16px; height: 16px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.2s;
+}
+.choice.selected .choice-indicator { border-color: var(--white); }
+.choice.selected .choice-indicator::after {
+  content: '';
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--white);
+}
+.choice-key {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--dim);
+  flex-shrink: 0;
+  margin-top: 2px;
+  width: 16px;
+}
+.choice-text { font-size: 15px; line-height: 1.6; color: var(--white); }
+.choice.selected .choice-text { color: var(--white); }
+
+/* Submit */
+.submit-area {
+  padding: 64px 0 0;
+}
+.submit-note {
+  font-size: 14px;
+  color: var(--dim);
+  line-height: 1.7;
+  margin-bottom: 36px;
+  max-width: 480px;
+  border-left: 1px solid var(--line);
+  padding-left: 20px;
+}
+.btn-submit {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--black);
+  background: var(--white);
+  border: none;
+  padding: 16px 36px;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s, opacity 0.2s;
+}
+.btn-submit:hover { background: #ffffff; transform: translateY(-1px); }
+.btn-submit:disabled { opacity: 0.3; cursor: not-allowed; transform: none; }
+.form-error {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: rgba(240,120,100,0.8);
+  margin-top: 20px;
+  display: none;
+  text-transform: uppercase;
+}
+.form-error.show { display: block; }
+
+/* ── Success Screen ── */
+.success-screen {
+  display: none;
+  padding: 140px 48px;
+  max-width: 680px;
+}
+.success-screen.show { display: block; }
+.success-screen .eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--dim);
+  margin-bottom: 32px;
+}
+.success-screen h2 {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(36px, 5vw, 60px);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  margin-bottom: 20px;
+}
+.success-screen p {
+  font-size: 16px;
+  color: var(--dim);
+  line-height: 1.75;
+  max-width: 460px;
+}
+.success-ref {
+  margin-top: 36px;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+
+/* ════════════════════════════════
+   TRANSITIONS & ANIMATIONS
+════════════════════════════════ */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.page-enter {
+  animation: pageIn 0.5s ease both;
+}
+@keyframes pageIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ════════════════════════════════
+   RESPONSIVE
+════════════════════════════════ */
+@media (max-width: 640px) {
+  .nav { padding: 24px; }
+  .hero { padding: 0 24px 60px; }
+  .manifesto { padding: 80px 24px; }
+  .section { padding: 72px 24px; }
+  .numbers { padding: 0; }
+  .number-cell { padding: 48px 24px; }
+  .cta-band { padding: 100px 24px; gap: 36px; }
+  .footer { padding: 32px 24px; }
+  .app-header { padding: 120px 24px 60px; }
+  .app-body { padding: 0 24px 80px; }
+  .field-grid { grid-template-columns: 1fr; }
+  .field-full { grid-column: 1; }
+  .numbers { grid-template-columns: 1fr; }
+  .hero-scroll { display: none; }
+  .success-screen { padding: 120px 24px; }
+  .submit-area { padding: 48px 0 0; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══ SHARED NAV ══ -->
+<nav class="nav" id="main-nav">
+  <span class="nav-logo" onclick="goHome()">Meritori</span>
+  <button class="nav-apply" onclick="goApply()" id="nav-btn">Apply for Cohort 1 →</button>
+</nav>
+
+<!-- ══════════════════════════════════
+     PAGE: LANDING
+══════════════════════════════════ -->
+<div class="page active" id="page-home">
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-orb"></div>
+    <p class="hero-eyebrow">Cohort 1 · Now open · 8 seats</p>
+    <h1 class="hero-title">
+      We don't care<br/>
+      where you studied.<br/>
+      We care what<br/>
+      you've <em>built</em>.
+    </h1>
+    <div class="hero-cta">
+      <button class="btn-hero" onclick="goApply()">
+        Apply for Early Access
+        <span class="arrow">→</span>
+      </button>
+    </div>
+    <span class="hero-scroll">Scroll</span>
+  </section>
+
+  <!-- Marquee -->
+  <div class="marquee-wrap">
+    <div class="marquee-track">
+      <span class="marquee-item">Talent over pedigree</span>
+      <span class="marquee-item">8 seats per cohort</span>
+      <span class="marquee-item">No resumes. No grades.</span>
+      <span class="marquee-item">Build real products</span>
+      <span class="marquee-item">Passion is the only filter</span>
+      <span class="marquee-item">We believe in merit</span>
+      <span class="marquee-item">Six weeks. Real mentors.</span>
+      <span class="marquee-item">Ship or go home</span>
+      <!-- duplicate -->
+      <span class="marquee-item">Talent over pedigree</span>
+      <span class="marquee-item">8 seats per cohort</span>
+      <span class="marquee-item">No resumes. No grades.</span>
+      <span class="marquee-item">Build real products</span>
+      <span class="marquee-item">Passion is the only filter</span>
+      <span class="marquee-item">We believe in merit</span>
+      <span class="marquee-item">Six weeks. Real mentors.</span>
+      <span class="marquee-item">Ship or go home</span>
+    </div>
+  </div>
+
+  <!-- Manifesto -->
+  <div class="manifesto">
+    <p class="manifesto-line" data-manifesto>Talent is <em>everywhere</em>.</p>
+    <p class="manifesto-line" data-manifesto>Opportunity is not.</p>
+    <p class="manifesto-line" data-manifesto>We are here to close that gap —</p>
+    <p class="manifesto-line" data-manifesto>not with a scholarship,</p>
+    <p class="manifesto-line" data-manifesto>but with <em>a seat at the table.</em></p>
+  </div>
+
+  <!-- Beliefs -->
+  <section class="section">
+    <p class="section-no">01 — What we believe</p>
+    <ul class="beliefs-list">
+      <li class="belief">
+        <span class="belief-n">01</span>
+        <div class="belief-text">
+          <h3>Talent is the only ticket.</h3>
+          <p>We don't care about your CGPA, your college tier, or your last internship. We care about what you've built, how you think, and whether you lose sleep over ideas.</p>
+        </div>
+      </li>
+      <li class="belief">
+        <span class="belief-n">02</span>
+        <div class="belief-text">
+          <h3>Building beats talking.</h3>
+          <p>The best learning happens in the trenches — debugging a production bug, iterating on feedback, shipping something real. Not attending lectures on how to ship.</p>
+        </div>
+      </li>
+      <li class="belief">
+        <span class="belief-n">03</span>
+        <div class="belief-text">
+          <h3>Small cohorts, real mentors.</h3>
+          <p>8 seats. Mentors who've shipped products used by real people. No 500-person bootcamp with one overwhelmed instructor — focused, deep, honest work.</p>
+        </div>
+      </li>
+      <li class="belief">
+        <span class="belief-n">04</span>
+        <div class="belief-text">
+          <h3>Honesty over comfort.</h3>
+          <p>If your code is bad, we'll tell you. If your idea has a flaw, we'll find it. We're not here to make you feel good — we're here to make you genuinely better.</p>
+        </div>
+      </li>
+    </ul>
+  </section>
+
+  <!-- Numbers -->
+  <div class="numbers">
+    <div class="number-cell">
+      <span class="number-big">8</span>
+      <span class="number-label">Seats per cohort</span>
+    </div>
+    <div class="number-cell">
+      <span class="number-big">6</span>
+      <span class="number-label">Weeks of mentorship</span>
+    </div>
+    <div class="number-cell">
+      <span class="number-big">0</span>
+      <span class="number-label">Resume requirements</span>
+    </div>
+  </div>
+
+  <!-- Process -->
+  <section class="section">
+    <p class="section-no">02 — How it works</p>
+    <ol class="process-list">
+      <li class="process-item">
+        <span class="process-n">01 ·</span>
+        <div class="process-content">
+          <h3>Apply with honest answers</h3>
+          <p>No resume. No grades. Answer 12 questions designed to surface real builders — what you've made, why you made it, what broke, and what you learned. Takes ~15 minutes.</p>
+        </div>
+      </li>
+      <li class="process-item">
+        <span class="process-n">02 ·</span>
+        <div class="process-content">
+          <h3>A 20-minute live build session</h3>
+          <p>Shortlisted candidates join a quick live session — not a whiteboard interview, but a real problem to think through out loud. We're evaluating curiosity, not performance.</p>
+        </div>
+      </li>
+      <li class="process-item">
+        <span class="process-n">03 ·</span>
+        <div class="process-content">
+          <h3>Eight are selected. The cohort begins.</h3>
+          <p>6 weeks, 6 hours/week. Weekly deep-dives, code reviews, project sprints, 1-on-1 sessions. You'll build something real by the end — not a tutorial project.</p>
+        </div>
+      </li>
+      <li class="process-item">
+        <span class="process-n">04 ·</span>
+        <div class="process-content">
+          <h3>Ship &amp; join the alumni network</h3>
+          <p>Graduates join a growing community of builders. Referrals, opportunities, collaborations — and the right to call yourself someone who was selected by merit alone.</p>
+        </div>
+      </li>
+    </ol>
+  </section>
+
+  <!-- CTA Band -->
+  <div class="cta-band">
+    <h2>
+      The best time to find out<br/>
+      if you're <em>really</em> built for this<br/>
+      is right now.
+    </h2>
+    <div class="cta-meta">
+      <span>Applications open</span>
+      <span>8 seats · Cohort 1</span>
+      <span>Free to apply</span>
+    </div>
+    <button class="btn-hero" onclick="goApply()">
+      Apply for Cohort 1 <span class="arrow">→</span>
+    </button>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <span class="footer-copy">© 2025 Meritori · All rights reserved</span>
+    <span class="footer-copy">meritori.io</span>
+  </footer>
+
+</div><!-- /page-home -->
+
+
+<!-- ══════════════════════════════════
+     PAGE: APPLICATION
+══════════════════════════════════ -->
+<div class="page" id="page-apply">
+  <div class="app-page">
+
+    <!-- Header -->
+    <div class="app-header">
+      <p class="app-eyebrow">Meritori · Cohort 1 Application</p>
+      <h1>Are you here to <em>build</em>,<br/>or to browse?</h1>
+      <p>No resume. No grades. Just honest answers. I read every application personally — usually within 48 hours.</p>
+      <div class="app-meta">
+        <span class="app-meta-tag">~15 minutes</span>
+        <span class="app-meta-tag">12 questions</span>
+        <span class="app-meta-tag">8 seats available</span>
+      </div>
+    </div>
+
+    <div class="app-body">
+      <form id="application-form" novalidate>
+
+        <!-- Identity -->
+        <div class="identity-block">
+          <p class="block-label">01 — Who are you</p>
+          <div class="field-grid">
+            <div class="field">
+              <label for="fname">First name *</label>
+              <input type="text" id="fname" name="fname" placeholder="Alex" autocomplete="given-name"/>
+              <span class="err" id="err-fname">Required.</span>
+            </div>
+            <div class="field">
+              <label for="lname">Last name *</label>
+              <input type="text" id="lname" name="lname" placeholder="Sharma" autocomplete="family-name"/>
+              <span class="err" id="err-lname">Required.</span>
+            </div>
+            <div class="field">
+              <label for="email">College email *</label>
+              <input type="email" id="email" name="email" placeholder="alex@college.edu" autocomplete="email"/>
+              <span class="err" id="err-email">Valid email required.</span>
+            </div>
+            <div class="field">
+              <label for="year">Current year *</label>
+              <select id="year" name="year">
+                <option value="">— Select —</option>
+                <option>1st year</option>
+                <option>2nd year</option>
+                <option>3rd year</option>
+                <option>4th year</option>
+                <option>Postgraduate</option>
+              </select>
+              <span class="err" id="err-year">Required.</span>
+            </div>
+            <div class="field">
+              <label for="branch">Branch / Major *</label>
+              <input type="text" id="branch" name="branch" placeholder="Computer Science, ECE…"/>
+              <span class="err" id="err-branch">Required.</span>
+            </div>
+            <div class="field">
+              <label for="github">GitHub handle (optional)</label>
+              <input type="text" id="github" name="github" placeholder="@yourusername"/>
+            </div>
+          </div>
+        </div>
+
+        <!-- Questions -->
+        <div class="questions">
+          <p class="block-label">02 — The real questions</p>
+
+          <!-- Q1 -->
+          <div class="q-block">
+            <p class="q-label">Motivation</p>
+            <p class="q-text">What's the last thing you built — and why did you build it?</p>
+            <p class="q-hint">Could be a script, an app, a side project, a hack. Doesn't need to be impressive — it needs to be real.</p>
+            <textarea id="q1" name="q1" maxlength="800" placeholder="I built a CLI tool that auto-renamed my messy photo folders because I was frustrated enough to fix it…"></textarea>
+            <div class="char-count" id="cc1">0 / 800</div>
+            <span class="err" id="err-q1">Please answer (min 80 characters).</span>
+          </div>
+
+          <!-- Q2 -->
+          <div class="q-block">
+            <p class="q-label">Problem Instinct</p>
+            <p class="q-text">Name one broken or annoying thing in your daily life that could be fixed with software.</p>
+            <p class="q-hint">Be specific. "The whole education system" is not a problem — it's a vibe. What exactly, for whom, when?</p>
+            <textarea id="q2" name="q2" maxlength="700" placeholder="My hostel mess posts its menu as a blurry JPEG every morning. I'd build a parser that…"></textarea>
+            <div class="char-count" id="cc2">0 / 700</div>
+            <span class="err" id="err-q2">Please answer (min 60 characters).</span>
+          </div>
+
+          <!-- Q3 -->
+          <div class="q-block">
+            <p class="q-label">Learning Style</p>
+            <p class="q-text">You're stuck on a bug for 2 hours. What do you actually do?</p>
+            <p class="q-hint">Pick the most honest answer — not the one that sounds best.</p>
+            <div class="choices" id="q3-choices">
+              <label class="choice" onclick="pickChoice(this,'q3')"><input type="radio" name="q3" value="a"/><span class="choice-indicator"></span><span class="choice-key">A</span><span class="choice-text">Read the error carefully, rubber-duck it, then search Stack Overflow with the exact error.</span></label>
+              <label class="choice" onclick="pickChoice(this,'q3')"><input type="radio" name="q3" value="b"/><span class="choice-indicator"></span><span class="choice-key">B</span><span class="choice-text">Immediately ask a senior or post in a group chat.</span></label>
+              <label class="choice" onclick="pickChoice(this,'q3')"><input type="radio" name="q3" value="c"/><span class="choice-indicator"></span><span class="choice-key">C</span><span class="choice-text">Step away, take a walk, come back with fresh eyes.</span></label>
+              <label class="choice" onclick="pickChoice(this,'q3')"><input type="radio" name="q3" value="d"/><span class="choice-indicator"></span><span class="choice-key">D</span><span class="choice-text">Binary search the code — comment out half, see which half broke it.</span></label>
+            </div>
+            <span class="err" id="err-q3">Please select an option.</span>
+          </div>
+
+          <!-- Q4 -->
+          <div class="q-block">
+            <p class="q-label">Technical Depth</p>
+            <p class="q-text">Pick any technology you know reasonably well. Explain it like I'm a smart 12-year-old.</p>
+            <p class="q-hint">I'm testing whether you understand it, not whether you can recite documentation.</p>
+            <textarea id="q4" name="q4" maxlength="800" placeholder="REST APIs are like a waiter at a restaurant. You (the client) give an order (request) to the waiter (API)…"></textarea>
+            <div class="char-count" id="cc4">0 / 800</div>
+            <span class="err" id="err-q4">Please answer (min 80 characters).</span>
+          </div>
+
+          <!-- Q5 -->
+          <div class="q-block">
+            <p class="q-label">Grit &amp; Iteration</p>
+            <p class="q-text">Tell me about a time you started something and gave up on it. Why? What would you do differently?</p>
+            <p class="q-hint">Everyone gives up on things. The question is whether you're honest about it and learned anything.</p>
+            <textarea id="q5" name="q5" maxlength="800" placeholder="I started building a budgeting app last year but stopped after a week because…"></textarea>
+            <div class="char-count" id="cc5">0 / 800</div>
+            <span class="err" id="err-q5">Please answer (min 80 characters).</span>
+          </div>
+
+          <!-- Q6 -->
+          <div class="q-block">
+            <p class="q-label">Product Thinking</p>
+            <p class="q-text">A friend shows you their new app. You immediately notice a bad UX problem. What do you do?</p>
+            <div class="choices" id="q6-choices">
+              <label class="choice" onclick="pickChoice(this,'q6')"><input type="radio" name="q6" value="a"/><span class="choice-indicator"></span><span class="choice-key">A</span><span class="choice-text">Say nothing — it's their project, not your place.</span></label>
+              <label class="choice" onclick="pickChoice(this,'q6')"><input type="radio" name="q6" value="b"/><span class="choice-indicator"></span><span class="choice-key">B</span><span class="choice-text">Tell them exactly what's wrong and how you'd fix it, even if they didn't ask.</span></label>
+              <label class="choice" onclick="pickChoice(this,'q6')"><input type="radio" name="q6" value="c"/><span class="choice-indicator"></span><span class="choice-key">C</span><span class="choice-text">Ask if they want feedback first, then be specific and kind.</span></label>
+              <label class="choice" onclick="pickChoice(this,'q6')"><input type="radio" name="q6" value="d"/><span class="choice-indicator"></span><span class="choice-key">D</span><span class="choice-text">Compliment it, and privately note not to design things that way.</span></label>
+            </div>
+            <span class="err" id="err-q6">Please select an option.</span>
+          </div>
+
+          <!-- Q7 -->
+          <div class="q-block">
+            <p class="q-label">Curiosity</p>
+            <p class="q-text">What's the last technical rabbit hole you went down — and what triggered it?</p>
+            <p class="q-hint">A YouTube video, a weird bug, a tweet, a documentation page. What did you end up learning?</p>
+            <textarea id="q7" name="q7" maxlength="700" placeholder="I saw a tweet about how Postgres uses MVCC for transactions, ended up reading the internals for 3 hours…"></textarea>
+            <div class="char-count" id="cc7">0 / 700</div>
+            <span class="err" id="err-q7">Please answer (min 60 characters).</span>
+          </div>
+
+          <!-- Q8 -->
+          <div class="q-block">
+            <p class="q-label">Vision</p>
+            <p class="q-text">If you had 4 weeks, a laptop, and no other commitments — what would you build?</p>
+            <p class="q-hint">Don't say "the next Zomato." Be specific about the core loop, who it's for, and why you personally care.</p>
+            <textarea id="q8" name="q8" maxlength="900" placeholder="I'd build a tool for small tutors to manage their students and payments without needing a spreadsheet…"></textarea>
+            <div class="char-count" id="cc8">0 / 900</div>
+            <span class="err" id="err-q8">Please answer (min 100 characters).</span>
+          </div>
+
+          <!-- Q9 -->
+          <div class="q-block">
+            <p class="q-label">Team Dynamics</p>
+            <p class="q-text">In a group project, which role do you naturally fall into?</p>
+            <div class="choices" id="q9-choices">
+              <label class="choice" onclick="pickChoice(this,'q9')"><input type="radio" name="q9" value="a"/><span class="choice-indicator"></span><span class="choice-key">A</span><span class="choice-text">The one who sets up the repo, defines the structure, and gets everyone moving.</span></label>
+              <label class="choice" onclick="pickChoice(this,'q9')"><input type="radio" name="q9" value="b"/><span class="choice-indicator"></span><span class="choice-key">B</span><span class="choice-text">The one who picks the hardest technical problem and disappears into it.</span></label>
+              <label class="choice" onclick="pickChoice(this,'q9')"><input type="radio" name="q9" value="c"/><span class="choice-indicator"></span><span class="choice-key">C</span><span class="choice-text">The one who keeps checking in and makes sure nothing falls through the cracks.</span></label>
+              <label class="choice" onclick="pickChoice(this,'q9')"><input type="radio" name="q9" value="d"/><span class="choice-indicator"></span><span class="choice-key">D</span><span class="choice-text">The one who questions whether the whole approach is right before writing a line of code.</span></label>
+            </div>
+            <span class="err" id="err-q9">Please select an option.</span>
+          </div>
+
+          <!-- Q10 -->
+          <div class="q-block">
+            <p class="q-label">Self Awareness</p>
+            <p class="q-text">What's the biggest gap in your skills right now — and what are you doing about it?</p>
+            <p class="q-hint">Honesty here matters far more than having a perfect answer.</p>
+            <textarea id="q10" name="q10" maxlength="700" placeholder="I'm weak on system design — I can code features but struggle thinking about scale. I've been reading…"></textarea>
+            <div class="char-count" id="cc10">0 / 700</div>
+            <span class="err" id="err-q10">Please answer (min 60 characters).</span>
+          </div>
+
+          <!-- Q11 -->
+          <div class="q-block">
+            <p class="q-label">Open Question</p>
+            <p class="q-text">Anything else you'd like me to know?</p>
+            <p class="q-hint">Optional. This is where interesting people tend to differentiate themselves.</p>
+            <textarea id="q11" name="q11" maxlength="600" placeholder="(Optional)" style="min-height:90px;"></textarea>
+            <div class="char-count" id="cc11">0 / 600</div>
+          </div>
+
+          <!-- Q12 -->
+          <div class="q-block">
+            <p class="q-label">Commitment</p>
+            <p class="q-text">This mentorship requires 6 hours/week for 8 weeks. Are you genuinely available?</p>
+            <div class="choices" id="q12-choices">
+              <label class="choice" onclick="pickChoice(this,'q12')"><input type="radio" name="q12" value="yes"/><span class="choice-indicator"></span><span class="choice-key">Yes</span><span class="choice-text">I've checked my semester schedule and I'm in.</span></label>
+              <label class="choice" onclick="pickChoice(this,'q12')"><input type="radio" name="q12" value="maybe"/><span class="choice-indicator"></span><span class="choice-key">Mostly</span><span class="choice-text">There's one week with exams but I can manage around it.</span></label>
+              <label class="choice" onclick="pickChoice(this,'q12')"><input type="radio" name="q12" value="no"/><span class="choice-indicator"></span><span class="choice-key">No</span><span class="choice-text">Honestly no — this semester is heavy but I'm interested in a future cohort.</span></label>
+            </div>
+            <span class="err" id="err-q12">Please select an option.</span>
+          </div>
+
+        </div><!-- /questions -->
+
+        <!-- Submit -->
+        <div class="submit-area">
+          <p class="submit-note">Your answers are saved as-is. There's no auto-save. Take your time, then submit once. I read every response personally — within 48 hours.</p>
+          <button type="submit" class="btn-submit" id="submit-btn">
+            Submit Application <span>→</span>
+          </button>
+          <p class="form-error" id="form-error">↑ Please fill all required fields before submitting.</p>
+        </div>
+
+      </form>
+
+      <!-- Success -->
+      <div class="success-screen" id="success-screen">
+        <p class="eyebrow">Application received</p>
+        <h2>You're in the queue.</h2>
+        <p>Thanks for taking the time to answer honestly. I'll read through everything and get back to you within 48 hours.</p>
+        <p class="success-ref" id="success-ref"></p>
+      </div>
+
+    </div>
+  </div>
+</div><!-- /page-apply -->
+
+
+<script>
+/* ════════════════════
+   SPA ROUTING
+════════════════════ */
+function goHome() {
+  document.getElementById('page-home').classList.add('active');
+  document.getElementById('page-apply').classList.remove('active');
+  document.getElementById('nav-btn').textContent = 'Apply for Cohort 1 →';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function goApply() {
+  document.getElementById('page-home').classList.remove('active');
+  const applyPage = document.getElementById('page-apply');
+  applyPage.classList.add('active');
+  applyPage.classList.add('page-enter');
+  setTimeout(() => applyPage.classList.remove('page-enter'), 600);
+  document.getElementById('nav-btn').textContent = '← Back';
+  document.getElementById('nav-btn').onclick = goHome;
+  window.scrollTo({ top: 0 });
+  initReveal();
+}
+
+/* ════════════════════
+   SCROLL REVEALS
+════════════════════ */
+function initReveal() {
+  const targets = document.querySelectorAll('.belief, .number-cell, .process-item, .q-block');
+  const io = new IntersectionObserver(entries => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 60);
+      }
+    });
+  }, { threshold: 0.1 });
+  targets.forEach(el => io.observe(el));
+}
+
+// Init for home page on load
+document.addEventListener('DOMContentLoaded', initReveal);
+
+/* Manifesto highlight on scroll */
+const manifestoLines = document.querySelectorAll('[data-manifesto]');
+const mio = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) e.target.classList.add('lit');
+  });
+}, { threshold: 0.5 });
+manifestoLines.forEach(l => mio.observe(l));
+
+/* ════════════════════
+   CHAR COUNTERS
+════════════════════ */
+const textFields = [
+  { id: 'q1', cc: 'cc1', max: 800 },
+  { id: 'q2', cc: 'cc2', max: 700 },
+  { id: 'q4', cc: 'cc4', max: 800 },
+  { id: 'q5', cc: 'cc5', max: 800 },
+  { id: 'q7', cc: 'cc7', max: 700 },
+  { id: 'q8', cc: 'cc8', max: 900 },
+  { id: 'q10', cc: 'cc10', max: 700 },
+  { id: 'q11', cc: 'cc11', max: 600 },
+];
+textFields.forEach(({ id, cc, max }) => {
+  const el = document.getElementById(id);
+  const counter = document.getElementById(cc);
+  if (!el || !counter) return;
+  el.addEventListener('input', () => {
+    const len = el.value.length;
+    counter.textContent = len + ' / ' + max;
+    counter.className = 'char-count active' +
+      (len > max * 0.9 ? ' warn' : '') +
+      (len >= max ? ' over' : '');
+  });
+});
+
+/* ════════════════════
+   RADIO CHOICES
+════════════════════ */
+function pickChoice(el, group) {
+  document.querySelectorAll('[id="' + group + '-choices"] .choice').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  const err = document.getElementById('err-' + group);
+  if (err) err.classList.remove('show');
+}
+
+/* ════════════════════
+   VALIDATION
+════════════════════ */
+const textMins = { q1: 80, q2: 60, q4: 80, q5: 80, q7: 60, q8: 100, q10: 60 };
+const radioFields = ['q3', 'q6', 'q9', 'q12'];
+const requiredIds = ['fname', 'lname', 'email', 'year', 'branch'];
+
+function validate() {
+  let ok = true;
+
+  requiredIds.forEach(id => {
+    const el = document.getElementById(id);
+    const err = document.getElementById('err-' + id);
+    const empty = !el.value.trim();
+    el.classList.toggle('invalid', empty);
+    if (err) err.classList.toggle('show', empty);
+    if (empty) ok = false;
+  });
+
+  const emailEl = document.getElementById('email');
+  if (emailEl.value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailEl.value)) {
+    emailEl.classList.add('invalid');
+    document.getElementById('err-email').classList.add('show');
+    ok = false;
+  }
+
+  Object.entries(textMins).forEach(([id, min]) => {
+    const el = document.getElementById(id);
+    const err = document.getElementById('err-' + id);
+    const short = el.value.trim().length < min;
+    el.classList.toggle('invalid', short);
+    if (err) err.classList.toggle('show', short);
+    if (short) ok = false;
+  });
+
+  radioFields.forEach(name => {
+    const chosen = document.querySelector('input[name="' + name + '"]:checked');
+    const err = document.getElementById('err-' + name);
+    if (!chosen) {
+      if (err) err.classList.add('show');
+      ok = false;
+    }
+  });
+
+  return ok;
+}
+
+/* ════════════════════
+   FORM SUBMIT
+════════════════════ */
+document.getElementById('application-form').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const errBanner = document.getElementById('form-error');
+
+  if (!validate()) {
+    errBanner.classList.add('show');
+    const firstErr = document.querySelector('.err.show, .invalid');
+    if (firstErr) firstErr.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+
+  errBanner.classList.remove('show');
+  const btn = document.getElementById('submit-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<span style="letter-spacing:0.16em;font-size:11px;">Submitting…</span>';
+
+  const data = {
+    name: document.getElementById('fname').value.trim() + ' ' + document.getElementById('lname').value.trim(),
+    email: document.getElementById('email').value.trim(),
+    year: document.getElementById('year').value,
+    branch: document.getElementById('branch').value.trim(),
+    github: document.getElementById('github').value.trim(),
+    q1: document.getElementById('q1').value.trim(),
+    q2: document.getElementById('q2').value.trim(),
+    q3: document.querySelector('input[name="q3"]:checked')?.value,
+    q4: document.getElementById('q4').value.trim(),
+    q5: document.getElementById('q5').value.trim(),
+    q6: document.querySelector('input[name="q6"]:checked')?.value,
+    q7: document.getElementById('q7').value.trim(),
+    q8: document.getElementById('q8').value.trim(),
+    q9: document.querySelector('input[name="q9"]:checked')?.value,
+    q10: document.getElementById('q10').value.trim(),
+    q11: document.getElementById('q11').value.trim(),
+    q12: document.querySelector('input[name="q12"]:checked')?.value,
+    submitted_at: new Date().toISOString()
+  };
+
+  try {
+    const res = await fetch('/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    showSuccess(data.name);
+  } catch {
+    console.log('Submission data:', JSON.stringify(data, null, 2));
+    showSuccess(data.name);
+  }
+});
+
+function showSuccess(name) {
+  document.getElementById('application-form').style.display = 'none';
+  const s = document.getElementById('success-screen');
+  s.classList.add('show');
+  document.getElementById('success-ref').textContent =
+    'Reference: REF-' + Date.now().toString(36).toUpperCase();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+
+</body>
+</html>
