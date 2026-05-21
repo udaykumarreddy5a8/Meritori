@@ -1459,6 +1459,11 @@ textarea.invalid { border-color: rgba(251,113,133,0.3); }
               <span class="err" id="err-branch">Required.</span>
             </div>
             <div class="field">
+              <label for="mobile">Mobile number *</label>
+              <input type="text" id="mobile" name="mobile" placeholder="+91 98765 43210" autocomplete="tel" inputmode="tel"/>
+              <span class="err" id="err-mobile">Valid mobile number required.</span>
+            </div>
+            <div class="field">
               <label for="github">GitHub handle (optional)</label>
               <input type="text" id="github" name="github" placeholder="@yourusername"/>
             </div>
@@ -1708,7 +1713,7 @@ function pickChoice(el, group) {
 /* VALIDATION */
 const textMins = { q1: 80, q2: 60, q4: 80, q5: 80, q7: 60, q8: 100, q10: 60 };
 const radioFields = ['q3', 'q6', 'q9', 'q12'];
-const requiredIds = ['fname', 'lname', 'email', 'year', 'branch'];
+const requiredIds = ['fname', 'lname', 'email', 'year', 'branch', 'mobile'];
 
 function validate() {
   let ok = true;
@@ -1724,6 +1729,12 @@ function validate() {
   if (emailEl.value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailEl.value)) {
     emailEl.classList.add('invalid');
     document.getElementById('err-email').classList.add('show');
+    ok = false;
+  }
+  const mobileEl = document.getElementById('mobile');
+  if (mobileEl.value && !/^[+]?[\d\s\-().]{7,15}$/.test(mobileEl.value.trim())) {
+    mobileEl.classList.add('invalid');
+    document.getElementById('err-mobile').classList.add('show');
     ok = false;
   }
   Object.entries(textMins).forEach(([id, min]) => {
@@ -1761,6 +1772,7 @@ document.getElementById('application-form').addEventListener('submit', async fun
     email: document.getElementById('email').value.trim(),
     year: document.getElementById('year').value,
     branch: document.getElementById('branch').value.trim(),
+    mobile: document.getElementById('mobile').value.trim(),
     github: document.getElementById('github').value.trim(),
     q1: document.getElementById('q1').value.trim(),
     q2: document.getElementById('q2').value.trim(),

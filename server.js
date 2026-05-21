@@ -26,7 +26,7 @@ app.post('/submit', (req, res) => {
       ip: req.headers['x-forwarded-for'] || req.socket.remoteAddress,
       received_at: new Date().toISOString()
     };
-    const required = ['name','email','year','branch','q1','q2','q3','q4','q5','q6','q7','q8','q9','q10','q12'];
+    const required = ['name','email','mobile','year','branch','q1','q2','q3','q4','q5','q6','q7','q8','q9','q10','q12'];
     const missing = required.filter(f => !submission[f]);
     if (missing.length > 0) return res.status(400).json({ error: 'Missing fields', fields: missing });
     const existing = JSON.parse(fs.readFileSync(SUBMISSIONS_FILE, 'utf8'));

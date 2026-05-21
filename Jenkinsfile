@@ -1,6 +1,15 @@
 pipeline {
     agent any
 
+    options {
+        // Kill a build if it runs longer than 5 minutes
+        timeout(time: 5, unit: 'MINUTES')
+        // Keep only the last 5 build logs
+        buildDiscarder(logRotator(numToKeepStr: '5'))
+        // Don't run concurrent builds
+        disableConcurrentBuilds()
+    }
+
     stages {
         stage('Checkout') {
             steps {
@@ -10,15 +19,26 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                sh 'npm install --production'
+                // Only reinstall if package.json changed
+                sh '''
+                    if [ ! -d node_modules ] || [ package.json -nt node_modules ]; then
+                        npm install --production --prefer-offline
+                    else
+                        echo "node_modules up to date, skipping install"
+                    fi
+                '''
             }
         }
 
         stage('Deploy') {
             steps {
+                // Deploy directly from workspace — no copy needed
                 sh '''
-                    cp -r . /home/ec2-user/app/
-                    sudo -u ec2-user /usr/bin/pm2 restart meritori || sudo -u ec2-user /usr/bin/pm2 start /home/ec2-user/app/server.js --name meritori
+                    export APP_DIR=$(pwd)
+                    sudo -u ec2-user /usr/bin/pm2 restart meritori \
+                        || sudo -u ec2-user /usr/bin/pm2 start "$APP_DIR/server.js" \
+                            --name meritori \
+                            --cwd "$APP_DIR"
                     sudo -u ec2-user /usr/bin/pm2 save
                 '''
             }
@@ -26,15 +46,18 @@ pipeline {
 
         stage('Health Check') {
             steps {
-                sh 'sleep 3 && curl -sf http://localhost:3000/health'
+                sh 'sleep 2 && curl -sf http://localhost:3000/health'
             }
         }
     }
 
     post {
+        success {
+            echo "Deployed successfully in ${currentBuild.durationString}"
+        }
         failure {
-            echo 'Deployment failed — rolling back'
-            sh 'pm2 restart meritori || true'
+            echo 'Deployment failed'
+            sh 'sudo -u ec2-user /usr/bin/pm2 restart meritori || true'
         }
     }
 }
